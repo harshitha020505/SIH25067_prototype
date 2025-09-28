@@ -17,7 +17,7 @@ const HmpiMap = () => {
   const messagesEndRef = useRef(null);
 
   const sites = {
-    "SiteA": { name: "SiteA", hpi: 98.27, location: "Hyderabad area", status: "High pollution" },
+    "Hyderabad": { name: "Hyderabad", hpi: 98.27, location: "Hyderabad area", status: "High pollution" },
     "Delhi": { name: "Delhi", hpi: 56.67, location: "Delhi", status: "Moderate pollution" },
     "Mumbai": { name: "Mumbai", hpi: 160.99, location: "Mumbai", status: "Very high pollution" },
     "Kolkata": { name: "Kolkata", hpi: 92.79, location: "Kolkata", status: "High pollution" },
@@ -217,8 +217,19 @@ Which site would you like to learn more about?`
   ];
 
   return (
-    <div className="relative w-full h-screen bg-gray-50">
-      <div className="w-full h-full">
+    <div className="relative w-full min-h-screen h-full bg-gray-50">
+      {/* Map Info Section */}
+      <div className="p-4 bg-white shadow-md border-b border-gray-200">
+        <h2 className="text-xl font-semibold text-gray-800 mb-1">
+          HMPI Groundwater Quality Map
+        </h2>
+        <p className="text-sm text-gray-600">
+          This interactive map shows groundwater quality across monitoring sites in India
+          based on the <strong>Heavy Metal Pollution Index (HPI)</strong>.
+          Higher HPI values indicate higher contamination.
+        </p>
+      </div>
+      <div className="w-full" style={{ height: "calc(100vh - 50px)" }}>
         <iframe
           src="/hmpi_map.html"
           title="HMPI Groundwater Quality Map"
@@ -227,6 +238,7 @@ Which site would you like to learn more about?`
           className="border-none"
         />
       </div>
+
 
       {!isChatOpen && (
         <button
@@ -346,7 +358,7 @@ Which site would you like to learn more about?`
                         setInputMessage(question);
                         setTimeout(() => handleSendMessage(), 100);
                       }}
-                      className="text-[11px] bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full hover:bg-blue-100 transition-colors"
+                      className="text-[9px] bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full hover:bg-blue-100 transition-colors"
                     >
                       {question}
                     </button>

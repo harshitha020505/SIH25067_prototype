@@ -20,19 +20,15 @@ export default function landingPage() {
                   <span className="text-5xl md:text-6xl text-black">C</span>
                   <span className="align-baseline">RITICAL</span>
                   <span className="text-5xl md:text-6xl ml-3 text-black">C</span>
-                  <span className="align-baseline">HALLENGE</span>
+                  <span className="align-baseline">HALLENGES</span>
                 </h2>
-                <p className="text-sm md:text-base text-gray-600 max-w-2xl leading-relaxed">
+                <p className="text-sm md:text-base ml-5 text-gray-600 max-w-2xl leading-relaxed">
                   Heavy metal contamination in groundwater poses severe health risks,
                   yet current assessment methods are inadequate for modern needs.
                 </p>
               </div>
 
-              <img
-                src="https://images.unsplash.com/photo-1576086213369-97a306d36557?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="Water contamination"
-                className="rounded-lg border mt-5 h-[0] border-gray-200"
-              />
+              
             </div>
 
             <div className="grid grid-cols-2 gap-2 w-full">
@@ -66,7 +62,7 @@ export default function landingPage() {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-start space-x-4 p-5 border border-gray-300 rounded-lg bg-white hover:shadow-md transition-shadow"
+                  className="flex items-start space-x-4 p-5 border-1 border-gray-500 rounded-lg bg-white hover:shadow-md transition-shadow"
                 >
                   <div className="flex-shrink-0 p-2 bg-gray-100 rounded-md">
                     {item.icon}
@@ -88,11 +84,11 @@ export default function landingPage() {
       <section id="statistics" className="py-10 bg-blue-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Heading */}
-          <div className="flex justify-between items-center mb-12">
+          <div className=" mb-12">
             <h2 className="text-2xl md:text-5xl w-[60vw] leading-[1.2] text-left font-bold text-gray-900 mb-4">
               Impact of the Solution
             </h2>
-            <p className="text-xs text-right md:text-[15px] w-[32vw] text-gray-600 max-w-2xl mr leading-relaxed">
+            <p className="text-xs  md:text-[15px]  text-gray-600 max-w-2xl mr leading-relaxed">
               A comparison of groundwater monitoring before and after the adoption
               of our automated Heavy Metal Pollution Index system.
             </p>

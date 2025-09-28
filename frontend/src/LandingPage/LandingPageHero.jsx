@@ -45,11 +45,9 @@ export default function LandingPageHero() {
           </p>
           <div className="mt-6 space-x-4">
             <button className="bg-white text-black px-3 py-1 rounded-md text-md shadow-md hover:bg-gray-200 transition">
-              Learn More
+              View Map
             </button>
-            <button className="bg-green-600 px-3 py-3 rounded-md text-lg shadow-md hover:bg-green-700 transition">
-              Get Started
-            </button>
+            
           </div>
 
         </div>

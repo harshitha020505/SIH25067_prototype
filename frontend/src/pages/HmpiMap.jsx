@@ -228,7 +228,7 @@ Which site would you like to learn more about?`
           Higher HPI values indicate higher contamination.
         </p>
       </div>
-      <div className="w-full" style={{ height: "calc(100vh - 50px)" }}>
+      <div className="w-full" style={{ height: "calc(150vh)" }}>
         <iframe
           src="/hmpi_map.html"
           title="HMPI Groundwater Quality Map"

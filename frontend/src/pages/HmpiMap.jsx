@@ -218,7 +218,6 @@ Which site would you like to learn more about?`
 
   return (
     <div className="relative w-full min-h-screen h-full bg-gray-50">
-      {/* Map Info Section */}
       <div className="p-4 bg-white shadow-md border-b border-gray-200">
         <h2 className="text-xl font-semibold text-gray-800 mb-1">
           HMPI Groundwater Quality Map
@@ -244,20 +243,18 @@ Which site would you like to learn more about?`
         <button
           onClick={() => setIsChatOpen(true)}
           className="fixed bottom-5 right-5 w-12 h-12 rounded-full shadow-lg z-50 group
-               bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600
+               bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600
                flex items-center justify-center transition-transform duration-300 hover:scale-105"
         >
           <MessageCircle size={22} className="text-white" />
 
-          {/* Tooltip */}
           <span className="absolute bottom-14 right-1/2 translate-x-1/2 bg-gray-900 text-white 
                      px- py-1 rounded-md text-xs opacity-0 group-hover:opacity-100
                      transition-opacity shadow-md">
             Ask about water quality
           </span>
 
-          {/* Pulse effect */}
-          <span className="absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-40 animate-ping"></span>
+          <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-40 animate-ping"></span>
         </button>
       )}
 
@@ -267,14 +264,14 @@ Which site would you like to learn more about?`
           className={`fixed bottom-8 right-4 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 transition-all duration-300 ${isMinimized ? "w-64 h-12" : "w-80 max-h-[90vh] flex flex-col"
             }`}
         >
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-3 rounded-t-2xl flex items-center justify-between">
+          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-3 rounded-t-2xl flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="bg-white/20 p-1.5 rounded-lg">
                 <BarChart3 size={18} />
               </div>
               <div>
                 <h3 className="text-sm font-semibold">Water Quality Assistant</h3>
-                <p className="text-[10px] text-blue-100">HMPI Data & Analysis</p>
+                <p className="text-[10px] text-green-100">HMPI Data & Analysis</p>
               </div>
             </div>
             <div className="flex gap-1">
@@ -305,7 +302,7 @@ Which site would you like to learn more about?`
                     <div
                       className={`max-w-[80%] p-2.5 rounded-xl text-sm ${message.isBot
                         ? "bg-gray-100 text-gray-800 rounded-bl-md"
-                        : "bg-blue-600 text-white rounded-br-md"
+                        : "bg-green-600 text-white rounded-br-md"
                         }`}
                     >
                       <div className="whitespace-pre-line">
@@ -314,7 +311,7 @@ Which site would you like to learn more about?`
                         )}
                       </div>
                       <div
-                        className={`text-[10px] mt-1 ${message.isBot ? "text-gray-500" : "text-blue-100"
+                        className={`text-[10px] mt-1 ${message.isBot ? "text-gray-500" : "text-green-100"
                           }`}
                       >
                         {message.timestamp.toLocaleTimeString([], {
@@ -358,7 +355,7 @@ Which site would you like to learn more about?`
                         setInputMessage(question);
                         setTimeout(() => handleSendMessage(), 100);
                       }}
-                      className="text-[9px] bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full hover:bg-blue-100 transition-colors"
+                      className="text-[9px] bg-green-50 text-green-600 px-2.5 py-1 rounded-full hover:bg-green-100 transition-colors"
                     >
                       {question}
                     </button>
@@ -374,12 +371,12 @@ Which site would you like to learn more about?`
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Ask about HPI, sites, or risks..."
-                    className="flex-1 p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="flex-1 p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                   />
                   <button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim() || isTyping}
-                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white p-2.5 rounded-xl transition-colors"
+                    className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white p-2.5 rounded-xl transition-colors"
                   >
                     <Send size={14} />
                   </button>

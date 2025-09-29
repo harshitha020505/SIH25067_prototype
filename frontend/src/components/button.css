@@ -1,0 +1,26 @@
+.three-d-button {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #2563eb; 
+  color: #e0f2fe;
+  border: 2px solid #bfdbfe; 
+  padding: 10px 20px;
+  box-shadow: 4px 4px 0px #1e40af; 
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.three-d-button:hover {
+  background-color: #1d4ed8; 
+  color: #ffffff;
+  transform: translate(-6px, -6px);
+  box-shadow: 9px 9px 0px #172554;
+}
+
+.three-d-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0px #1e3a8a; 
+}

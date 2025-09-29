@@ -1,6 +1,6 @@
 import React from 'react'
-import SandwichMenu from '../LandingPage/SandwichMenu'
-import LandingPageHero from '../LandingPage/landingPageHero'
+import SandwichMenu from './LandingPage/SandwichMenu'
+import LandingPageHero from './LandingPage/landingPageHero'
 import { TrendingUp, Users, FileText } from 'lucide-react';
 import { AlertTriangle, Clock, Globe } from 'lucide-react';
 import { Mail, Phone, MapPin as Location } from 'lucide-react';
@@ -31,7 +31,7 @@ export default function landingPage() {
               
             </div>
 
-            <div className="grid grid-cols-2 gap-2 w-full">
+            <div className="grid grid-cols-1 gap-2 w-full">
               {[
                 {
                   icon: <TrendingUp className="w-6 h-6 text-gray-800" />,

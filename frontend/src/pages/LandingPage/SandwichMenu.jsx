@@ -39,7 +39,7 @@ export default function SandwichMenu() {
                         </button>
 
                         <div className="space-y-8 flex flex-col text-center">
-                            <button className="text-xl font-bold hover:text-blue-400 transition-colors">
+                            <button onClick={() => window.location.href="/admin/login"} className="text-xl font-bold hover:text-blue-400 transition-colors">
                                 Office Login
                             </button>
                             <button className="text-xl font-bold hover:text-green-400 transition-colors">

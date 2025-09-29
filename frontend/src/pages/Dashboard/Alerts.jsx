@@ -133,9 +133,9 @@ export default function Alerts() {
           <button
             onClick={sendHPIAlert}
             disabled={isSending || !siteName || !hpiValue}
-            className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-2 rounded-lg font-semibold 
-                       hover:from-red-700 hover:to-red-800 transition disabled:bg-gray-400 disabled:from-gray-400 disabled:to-gray-500
-                       flex items-center justify-center"
+            className="px-3 mx-auto bg-gradient-to-r from-red-600 to-red-700 text-white py-2 rounded-lg font-semibold 
+                       hover:from-red-700  hover:to-red-800 transition disabled:bg-gray-400 disabled:from-gray-400 disabled:to-gray-500
+                       flex items-center "
           >
             {isSending ? (
               <span className="flex items-center">
@@ -164,9 +164,6 @@ export default function Alerts() {
           )}
         </div>
 
-        <button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition shadow-lg">
-          Configure Alert Settings
-        </button>
       </div>
     </div>
   );

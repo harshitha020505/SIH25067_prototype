@@ -38,9 +38,9 @@ except Exception as e:
 # =========================================================================
 OFFICER_CONTACTS = {
     # NOTE: Replace all these dummy numbers with a Twilio-verified mobile number for testing!
-    "Mumbai": "+918639086087",  
-    "Hyderabad": "+918639086087",
-    "Kolkata": "+918639086087",
+    "Mumbai": "+918977186820",  
+    "Hyderabad": "+919494783433",
+    "Kolkata": "+919948021183",
     "Delhi": "+918639086087",
     "Chennai": "+918639086087"
 }

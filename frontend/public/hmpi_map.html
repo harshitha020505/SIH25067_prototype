@@ -1,93 +1,199 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8" />
-  <title>HMPI Map Demo</title>
+  <title>HMPI Groundwater Quality Map</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    #map { height: 90vh; width: 100%; }
-    .legend { background: white; padding: 6px; border-radius: 4px; font-size: 14px; }
-    .leaflet-popup-content { font-size: 14px; font-weight: 500; }
-    .hover-popup { font-weight: bold; color: #111; }
+    #map {
+      height: 95vh;
+      width: 100%;
+    }
+
+    .leaflet-popup-content {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .tooltip-custom {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #333;
+    }
   </style>
 </head>
+
 <body>
   <div id="map"></div>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
   <script>
-    const data = {"type": "FeatureCollection", "features": [
-      {"type":"Feature","geometry":{"type":"Point","coordinates":[78.486,17.385]},"properties":{"site_name":"SiteA","hpi":98.27}},
-      {"type":"Feature","geometry":{"type":"Point","coordinates":[77.209,28.6139]},"properties":{"site_name":"Delhi","hpi":56.67}},
-      {"type":"Feature","geometry":{"type":"Point","coordinates":[72.8777,19.076]},"properties":{"site_name":"Mumbai","hpi":160.99}},
-      {"type":"Feature","geometry":{"type":"Point","coordinates":[88.3639,22.5726]},"properties":{"site_name":"Kolkata","hpi":92.79}},
-      {"type":"Feature","geometry":{"type":"Point","coordinates":[80.2707,13.0827]},"properties":{"site_name":"Chennai","hpi":26.13}}
-    ]};
-
-    // Center map on India
+    // Init map centered on India
     const map = L.map('map').setView([22.3511148, 78.6677428], 4.5);
 
     // Base map
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18
+      maxZoom: 12,
+      minZoom: 3
     }).addTo(map);
 
-    // Color scale (same as your first version)
-    function getColor(h) {
-      return h > 150 ? '#800026' :
-             h > 100 ? '#BD0026' :
-             h > 75  ? '#E31A1C' :
-             h > 50  ? '#FC4E2A' :
-             h > 25  ? '#FD8D3C' :
-             h > 10  ? '#FEB24C' :
-                       '#FFEDA0';
+    let statesLayer, districtsLayer, mandalsLayer;
+
+    // Style for polygons
+    function styleFeature(feature) {
+      return {
+        fillColor: "#4a90e2",
+        weight: 1,
+        opacity: 1,
+        color: "white",
+        dashArray: "2",
+        fillOpacity: 0.4
+      };
     }
 
-    // Heatmap layer
-    const heatData = data.features.map(f => [f.geometry.coordinates[1], f.geometry.coordinates[0], Math.max(f.properties.hpi/200, 0.1)]);
-    const heat = L.heatLayer(heatData, {radius: 40, blur: 25, maxZoom: 12}).addTo(map);
+    // Highlight polygon on hover
+    function highlightFeature(e) {
+      const layer = e.target;
+      layer.setStyle({
+        weight: 3,
+        color: "#ffcc00",
+        fillOpacity: 0.6
+      });
+      layer.bringToFront();
+    }
 
-    // Marker layer
-    const markers = L.layerGroup();
-    data.features.forEach(f => {
-      const lat = f.geometry.coordinates[1], lon = f.geometry.coordinates[0];
-      const h = f.properties.hpi;
-      const mk = L.circleMarker([lat,lon], {
-        radius: 9,
-        fillColor: getColor(h),
-        color: "#000",
-        weight: 1,
-        fillOpacity: 0.9
+    function resetHighlight(e) {
+      const layer = e.target;
+      layer.setStyle(styleFeature(layer.feature));
+    }
+
+    // Handle click → zoom to bounds
+    function zoomToFeature(e) {
+      map.fitBounds(e.target.getBounds());
+    }
+
+    // Factory to create onEachFeature for different levels
+    function onEachFeatureFactory(nameField) {
+      return function onEachFeature(feature, layer) {
+        const name = feature.properties[nameField];
+        const index = feature.properties.HPI || "N/A";
+
+        // Tooltip on hover
+        layer.bindTooltip(
+          `<div class="tooltip-custom"><b>${name}</b><br/>HPI: ${index}</div>`,
+          { sticky: true }
+        );
+
+        // Popup on click
+        layer.bindPopup(`<b>${name}</b><br>HPI Index: ${index}`);
+
+        layer.on({
+          mouseover: highlightFeature,
+          mouseout: resetHighlight,
+          click: zoomToFeature
+        });
+      };
+    }
+
+    function onEachFeatureFactory(nameField) {
+      return function (feature, layer) {
+        const name = feature.properties[nameField];
+        const index = feature.properties.index || "N/A";
+
+        // Hover → show name + index
+        layer.bindTooltip(`${name} (Index: ${index})`, {
+          permanent: false,
+          direction: "top",
+        });
+
+        // Click → zoom to feature
+        layer.on("click", () => {
+          map.fitBounds(layer.getBounds());
+        });
+      };
+    }
+
+
+    async function loadGeoJSON(url) {
+      const res = await fetch(url);
+      return await res.json();
+    }
+
+    async function initLayers() {
+      // States
+      const statesData = await loadGeoJSON("india_states.geojson");
+      statesLayer = L.geoJSON(statesData, {
+        style: styleFeature,
+        onEachFeature: onEachFeatureFactory("NAME_1")
+      }).addTo(map);
+
+      // Districts
+      const districtsData = await loadGeoJSON("india_districts.geojson");
+      districtsLayer = L.geoJSON(districtsData, {
+        style: styleFeature,
+        onEachFeature: onEachFeatureFactory("NAME_2")
       });
 
-      // Popup + hover interactivity
-      mk.bindPopup(`<div class="hover-popup"><b>${f.properties.site_name}</b><br>HPI: ${h}</div>`);
-      mk.on("mouseover", function () { this.openPopup(); this.setStyle({radius: 12, weight: 2}); });
-      mk.on("mouseout", function () { this.closePopup(); this.setStyle({radius: 9, weight: 1}); });
+      // Mandals
+      const mandalsData = await loadGeoJSON("india_mandals.geojson");
+      mandalsLayer = L.geoJSON(mandalsData, {
+        style: styleFeature,
+        onEachFeature: onEachFeatureFactory("NAME_3")
+      });
+    }
 
-      markers.addLayer(mk);
+    // Auto-switch layers on zoom
+    map.on("zoomend", () => {
+      const z = map.getZoom();
+
+      map.removeLayer(statesLayer);
+      map.removeLayer(districtsLayer);
+      map.removeLayer(mandalsLayer);
+
+      if (z < 6) {
+        statesLayer.addTo(map);
+      } else if (z >= 6 && z < 8) {
+        districtsLayer.addTo(map);
+      } else {
+        mandalsLayer.addTo(map);
+      }
     });
-    markers.addTo(map);
 
-    // Layer control
-    L.control.layers({}, { "Heatmap": heat, "Sampling Sites": markers }).addTo(map);
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "zoomTo") {
+        const { state, district, mandal } = event.data.location;
+        let targetLayer;
 
-    // Legend
-    const legend = L.control({position: 'bottomright'});
-    legend.onAdd = function () {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = '<b>HPI Scale</b><br>' +
-                      '<i style="background:#800026;width:18px;height:12px;display:inline-block"></i> >150<br>' +
-                      '<i style="background:#BD0026;width:18px;height:12px;display:inline-block"></i> 101-150<br>' +
-                      '<i style="background:#E31A1C;width:18px;height:12px;display:inline-block"></i> 76-100<br>' +
-                      '<i style="background:#FC4E2A;width:18px;height:12px;display:inline-block"></i> 51-75<br>' +
-                      '<i style="background:#FD8D3C;width:18px;height:12px;display:inline-block"></i> 26-50<br>' +
-                      '<i style="background:#FEB24C;width:18px;height:12px;display:inline-block"></i> 11-25<br>' +
-                      '<i style="background:#FFEDA0;width:18px;height:12px;display:inline-block"></i> 0-10<br>';
-      return div;
-    };
-    legend.addTo(map);
+        if (mandal) {
+          targetLayer = mandalsLayer.getLayers().find(
+            (l) => l.feature.properties.NAME_3 === mandal
+          );
+        } else if (district) {
+          targetLayer = districtsLayer.getLayers().find(
+            (l) => l.feature.properties.NAME_2 === district
+          );
+        } else if (state) {
+          targetLayer = statesLayer.getLayers().find(
+            (l) => l.feature.properties.NAME_1 === state
+          );
+        }
+
+        if (targetLayer) {
+          map.fitBounds(targetLayer.getBounds());
+          targetLayer.openTooltip();
+        }
+      }
+    });
+
+
+    // Init
+    initLayers();
   </script>
 </body>
+
 </html>

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Map, BarChart3, Bell, HelpCircle, Upload, Database, ChevronDown, X, FileText, Activity, Droplet, AlertTriangle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Map, BarChart3, Bell, HelpCircle, Upload, Database, X, FileText, Activity, Droplet, LogOut } from "lucide-react";
 import NavBar from "./Dashboard/NavBar";
 import DSS from "./Dashboard/DSS";
 import HMPI from "./Dashboard/HMPI";
@@ -8,9 +8,7 @@ import Reports from "./Dashboard/Reports";
 import Alerts from "./Dashboard/Alerts";
 import Help from "./Dashboard/Help";
 import Maps from "./Dashboard/Maps";
-import { useParams, useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 
 export default function OfficeDashboard() {
   const [activeTab, setActiveTab] = useState("maps");
@@ -18,49 +16,47 @@ export default function OfficeDashboard() {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedMandal, setSelectedMandal] = useState("");
   const [showLocationModal, setShowLocationModal] = useState(false);
-  let { role } = useParams(); 
-  const navigate = useNavigate();
 
-  role = role == 'quality-inspector' ? 'Quality Inspector' : 'Field Officer';
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [mandals, setMandals] = useState([]);
+
+  let { role } = useParams();
+  const navigate = useNavigate();
+  role = role === "quality-inspector" ? "Quality Inspector" : "Field Officer";
+
   const location = useLocation();
   const user = location.state?.user;
 
-  const handleLogout = () => {
-    navigate("/admin/login");
-  };
+  const handleLogout = () => navigate("/admin/login");
 
-  // Sample data - in real app, this would come from API
-  const states = ["Andhra Pradesh", "Telangana", "Karnataka", "Tamil Nadu", "Maharashtra"];
-  const districts = {
-    "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Tirupati"],
-    "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Khammam"],
-    "Karnataka": ["Bangalore", "Mysore", "Mangalore", "Hubli"],
-    "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Salem"],
-    "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik"]
-  };
-  const mandals = ["Mandal 1", "Mandal 2", "Mandal 3", "Mandal 4", "Mandal 5"];
+  // ⬇️ Load GeoJSON data for states, districts, mandals
+  useEffect(() => {
+    fetch("/india_states.geojson")
+      .then(res => res.json())
+      .then(data => {
+        const stateList = data.features.map(f => f.properties.NAME_1);
+        setStates([...new Set(stateList)]);
+      });
 
-  const navItems = [
-    { id: "maps", label: "Maps", icon: <Map size={18} />, roles: ["Field Officer", "Quality Inspector"] },
-    { id: "dss", label: "DSS", icon: <Database size={18} />, roles: ["Quality Inspector"] },
-    { id: "hmpi", label: "HMPI", icon: <Activity size={18} />, roles: ["Quality Inspector"] },
-    { id: "forecast", label: "Forecast", icon: <BarChart3 size={18} />, roles: ["Quality Inspector"] },
-    { id: "reports", label: "Reports", icon: <FileText size={18} />, roles: ["Quality Inspector"] },
-    { id: "alerts", label: "Alerts", icon: <Bell size={18} />, roles: ["Field Officer", "Quality Inspector"] },
-    { id: "upload", label: "Upload", icon: <Upload size={18} />, roles: ["Field Officer"] },
-    { id: "help", label: "Help", icon: <HelpCircle size={18} />, roles: ["Field Officer", "Quality Inspector"] },
-  ];
+    fetch("/india_districts.geojson")
+      .then(res => res.json())
+      .then(data => setDistricts(data.features));
 
-  const allowedNav = navItems.filter((item) => item.roles.includes(role));
+    fetch("/india_mandals.geojson")
+      .then(res => res.json())
+      .then(data => setMandals(data.features));
+  }, []);
 
-  const heavyMetals = [
-    { name: "Arsenic (As)", limit: 0.01, unit: "mg/L", current: 0.008, status: "safe" },
-    { name: "Lead (Pb)", limit: 0.01, unit: "mg/L", current: 0.015, status: "warning" },
-    { name: "Cadmium (Cd)", limit: 0.003, unit: "mg/L", current: 0.002, status: "safe" },
-    { name: "Mercury (Hg)", limit: 0.001, unit: "mg/L", current: 0.0005, status: "safe" },
-    { name: "Chromium (Cr)", limit: 0.05, unit: "mg/L", current: 0.055, status: "danger" },
-    { name: "Nickel (Ni)", limit: 0.02, unit: "mg/L", current: 0.012, status: "safe" }
-  ];
+  const filteredDistricts = districts
+    .filter(d => d.properties.NAME_1 === selectedState)
+    .map(d => d.properties.NAME_2);
+
+  const filteredMandals = mandals
+    .filter(m => m.properties.NAME_2 === selectedDistrict)
+    .map(m => m.properties.NAME_3);
+
+  const heavyMetals = [{ name: "Arsenic (As)", limit: 0.01, unit: "mg/L", current: 0.008, status: "safe" }, { name: "Lead (Pb)", limit: 0.01, unit: "mg/L", current: 0.015, status: "warning" }, { name: "Cadmium (Cd)", limit: 0.003, unit: "mg/L", current: 0.002, status: "safe" }, { name: "Mercury (Hg)", limit: 0.001, unit: "mg/L", current: 0.0005, status: "safe" }, { name: "Chromium (Cr)", limit: 0.05, unit: "mg/L", current: 0.055, status: "danger" }, { name: "Nickel (Ni)", limit: 0.02, unit: "mg/L", current: 0.012, status: "safe" }];
 
   const LocationModal = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -84,7 +80,9 @@ export default function OfficeDashboard() {
               className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:outline-none focus:border-blue-500 transition"
             >
               <option value="">-- Select State --</option>
-              {states.map(state => <option key={state} value={state}>{state}</option>)}
+              {states.map(state => (
+                <option key={state} value={state}>{state}</option>
+              ))}
             </select>
           </div>
 
@@ -100,7 +98,9 @@ export default function OfficeDashboard() {
                 className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:outline-none focus:border-blue-500 transition"
               >
                 <option value="">-- Select District --</option>
-                {districts[selectedState]?.map(district => <option key={district} value={district}>{district}</option>)}
+                {filteredDistricts.map(d => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
               </select>
             </div>
           )}
@@ -114,7 +114,9 @@ export default function OfficeDashboard() {
                 className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:outline-none focus:border-blue-500 transition"
               >
                 <option value="">-- Select Mandal --</option>
-                {mandals.map(mandal => <option key={mandal} value={mandal}>{mandal}</option>)}
+                {filteredMandals.map(m => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
               </select>
             </div>
           )}
@@ -138,20 +140,29 @@ export default function OfficeDashboard() {
     return location;
   };
 
+  const navItems = [
+    { id: "maps", label: "Maps", icon: <Map size={18} />, roles: ["Field Officer", "Quality Inspector"] },
+    { id: "dss", label: "DSS", icon: <Database size={18} />, roles: ["Quality Inspector"] },
+    { id: "hmpi", label: "HMPI", icon: <Activity size={18} />, roles: ["Quality Inspector"] },
+    { id: "forecast", label: "Forecast", icon: <BarChart3 size={18} />, roles: ["Quality Inspector"] },
+    { id: "reports", label: "Reports", icon: <FileText size={18} />, roles: ["Quality Inspector"] },
+    { id: "alerts", label: "Alerts", icon: <Bell size={18} />, roles: ["Field Officer", "Quality Inspector"] },
+    { id: "upload", label: "Upload", icon: <Upload size={18} />, roles: ["Field Officer"] },
+    { id: "help", label: "Help", icon: <HelpCircle size={18} />, roles: ["Field Officer", "Quality Inspector"] },
+  ];
+
+  const allowedNav = navItems.filter((item) => item.roles.includes(role));
+
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
-
-      {/* Floating Sticky Navbar */}
-      <header className="fixed top-0 mx-2 mt-2 rounded-xl border-1  left-0 right-0 z-50 bg-white/70 backdrop-blur-lg shadow-md shadow-blue-400 border-b border-blue-400 ">
+      {/* Navbar remains same */}
+      <header className="sticky top-2 mx-2 rounded-xl border-1 left-0 right-0 z-50 bg-white/70 backdrop-blur-lg shadow-md shadow-blue-400 border-b border-blue-400">
         <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
-
-          {/* Logo + Title */}
           <div>
             <h1 className="text-xl font-bold text-blue-800">HMPI Dashboard</h1>
             <p className="text-xs text-blue-600">Heavy Metal Pollution Index Monitoring</p>
           </div>
 
-          {/* Location Display */}
           <div className="flex items-center space-x-3">
             <Droplet className="text-blue-500" size={20} />
             <div className="text-sm">
@@ -166,7 +177,6 @@ export default function OfficeDashboard() {
             </button>
           </div>
 
-          {/* Role & Logout */}
           <div className="flex items-center space-x-4">
             <span className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg text-sm font-semibold shadow">
               {role}
@@ -181,47 +191,27 @@ export default function OfficeDashboard() {
         </div>
       </header>
 
-      {/* Add padding so content doesn't hide behind navbar */}
-      <div className="pt-24"></div>
-
 
       {/* Main Content */}
       <main className="flex-1 p-6 overflow-y-auto pb-32">
-
         {activeTab === "maps" && (
-          <Maps getLocationString={getLocationString} />
+          <Maps
+            getLocationString={getLocationString}
+            selectedState={selectedState}
+            selectedDistrict={selectedDistrict}
+            selectedMandal={selectedMandal}
+          />
         )}
-
-        {activeTab === "dss" && (
-          <DSS />
-        )}
-
-        {activeTab === "hmpi" && (
-          <HMPI heavyMetals={heavyMetals} />
-        )}
-
-        {activeTab === "forecast" && (
-          <Forecast />
-        )}
-
-        {activeTab === "reports" && (
-          <Reports />
-        )}
-
-        {activeTab === "alerts" && (
-          <Alerts />
-        )}
-
-        {activeTab === "upload" && (
-          <Upload />
-        )}
-
-        {activeTab === "help" && (
-          <Help />
-        )}
+        {activeTab === "dss" && <DSS />}
+        {activeTab === "hmpi" && <HMPI heavyMetals={heavyMetals} />}
+        {activeTab === "forecast" && <Forecast />}
+        {activeTab === "reports" && <Reports />}
+        {activeTab === "alerts" && <Alerts />}
+        {activeTab === "upload" && <Upload />}
+        {activeTab === "help" && <Help />}
       </main>
-      <NavBar allowedNav={allowedNav} activeTab={activeTab} setActiveTab={setActiveTab} role={role} />
 
+      <NavBar allowedNav={allowedNav} activeTab={activeTab} setActiveTab={setActiveTab} role={role} />
       {showLocationModal && <LocationModal />}
     </div>
   );

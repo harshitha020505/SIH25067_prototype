@@ -1,8 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Map } from "lucide-react";
 
-export default function Maps({ getLocationString }) {
-  const [loading, setLoading] = useState(true);
+export default function Maps({ getLocationString, selectedState, selectedDistrict, selectedMandal }) {
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    if (!iframeRef.current) return;
+
+    iframeRef.current.contentWindow.postMessage(
+      {
+        type: "zoomTo",
+        location: {
+          state: selectedState,
+          district: selectedDistrict,
+          mandal: selectedMandal,
+        },
+      },
+      "*"
+    );
+  }, [selectedState, selectedDistrict, selectedMandal]);
 
   return (
     <div className="space-y-6">
@@ -12,28 +28,17 @@ export default function Maps({ getLocationString }) {
           Interactive Groundwater Maps
         </h2>
         <p className="text-blue-700 mb-6">
-          Visualize groundwater quality and heavy metal distribution for{" "}
-          {getLocationString()}
+          Visualize groundwater quality and heavy metal distribution for {getLocationString()}
         </p>
 
-        <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl h-[75vh] border-2 border-blue-200 overflow-hidden">
-          {/* Loading Overlay */}
-          {loading && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm z-10">
-              <Map size={48} className="text-blue-500 animate-bounce mb-3" />
-              <p className="text-blue-600 font-semibold">Loading Interactive Map...</p>
-              <p className="text-blue-500 text-sm">Heat maps showing heavy metal concentrations</p>
-            </div>
-          )}
-
-          {/* Iframe Map */}
+        <div className="w-full" style={{ height: "calc(150vh)" }}>
           <iframe
+            ref={iframeRef}
             src="/hmpi_map.html"
             title="HMPI Groundwater Quality Map"
             width="100%"
             height="100%"
-            className="border-none rounded-xl"
-            onLoad={() => setLoading(false)}
+            className="border-none"
           />
         </div>
       </div>

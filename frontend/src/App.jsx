@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/landingPage";
+import LandingPage from "./pages/LandingPage";
 import HmpiMap from "./pages/HmpiMap";
-import OfficeDashboard from "./pages/officeDashboard";
+import OfficeDashboard from "./pages/OfficeDashboard";
 import Login from "./pages/Login";
 import Calculation from "./components/Calculation";
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import SandwichMenu from './LandingPage/SandwichMenu'
-import LandingPageHero from './LandingPage/landingPageHero'
+import LandingPageHero from './LandingPage/LandingPageHero'
 import { TrendingUp, Users, FileText } from 'lucide-react';
 import { AlertTriangle, Clock, Globe } from 'lucide-react';
 import { Mail, Phone, MapPin as Location } from 'lucide-react';

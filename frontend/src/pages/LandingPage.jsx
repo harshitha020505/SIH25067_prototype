@@ -10,85 +10,109 @@ export default function landingPage() {
     <div>
       <SandwichMenu />
       <LandingPageHero />
-      <section id="problem" className="min-h-[70vh] py-10 bg-green-10">
+      <section id="problem" className="min-h-[70vh] py-10 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
           <div className="grid md:grid-cols-2 gap-8 items-center">
+
+            {/* Left text block */}
             <div className="space-y-6 max-w-[40vw]">
               <div className="text-center md:text-left mb-6">
-                <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2 tracking-tight">
-                  <span className="text-5xl md:text-6xl text-black">C</span>
-                  <span className="align-baseline">RITICAL</span>
-                  <span className="text-5xl md:text-6xl ml-3 text-black">C</span>
-                  <span className="align-baseline">HALLENGES</span>
+                <h2 className="text-2xl md:text-4xl font-bold text-blue-800 mb-2 tracking-tight">
+                  <span className="text-5xl md:text-6xl text-blue-900">C</span>
+                  <span className="align-baseline text-blue-900">RITICAL</span>
+                  <span className="text-5xl md:text-6xl ml-3 text-blue-900">C</span>
+                  <span className="align-baseline text-blue-900">HALLENGES</span>
                 </h2>
-                <p className="text-sm md:text-base ml-5 text-gray-600 max-w-2xl leading-relaxed">
+                <p className="text-sm md:text-base ml-1 text-gray-700 max-w-2xl leading-relaxed">
                   Heavy metal contamination in groundwater poses severe health risks,
                   yet current assessment methods are inadequate for modern needs.
                 </p>
               </div>
-
-
             </div>
 
-            <div className="grid grid-cols-1 gap-2 w-full">
+            {/* Right cards block */}
+            <div className="grid grid-cols-1 gap-4 w-full">
               {[
                 {
-                  icon: <TrendingUp className="w-6 h-6 text-gray-800" />,
+                  icon: <TrendingUp className="w-6 h-6 text-blue-600" />,
                   title: "Rising Contamination",
                   description:
                     "Industrial activities and agricultural practices are increasing heavy metal presence in groundwater."
                 },
                 {
-                  icon: <Users className="w-6 h-6 text-gray-800" />,
+                  icon: <Users className="w-6 h-6 text-blue-600" />,
                   title: "Health Risks",
                   description:
                     "Even trace levels of heavy metals can cause neurological disorders, organ damage, and cancer."
                 },
                 {
-                  icon: <FileText className="w-6 h-6 text-gray-800" />,
+                  icon: <FileText className="w-6 h-6 text-blue-600" />,
                   title: "Manual Processes",
                   description:
                     "Current assessment methods are slow, error-prone, and inconsistent across laboratories."
                 },
-
                 {
-                  icon: <Clock className="w-6 h-6 text-gray-800" />,
+                  icon: <Clock className="w-6 h-6 text-blue-600" />,
                   title: "Delayed Reporting",
                   description:
                     "Conventional reporting takes weeks to months, delaying critical interventions and policy responses."
-                },
-
+                }
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-start space-x-4 p-5 border-1 border-gray-500 rounded-lg bg-white hover:shadow-md transition-shadow"
+                  className="flex items-start space-x-4 p-5 border border-blue-200 rounded-lg bg-white hover:shadow-lg transition-shadow"
                 >
-                  <div className="flex-shrink-0 p-2 bg-gray-100 rounded-md">
+                  <div className="flex-shrink-0 p-2 bg-blue-100 rounded-md">
                     {item.icon}
                   </div>
                   <div>
-                    <h3 className="text-md font-semibold text-gray-900 mb-1">
+                    <h3 className="text-md font-semibold text-black mb-1">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-gray-600">{item.description}</p>
+                    <p className="text-sm text-gray-700">{item.description}</p>
                   </div>
                 </div>
               ))}
             </div>
-
           </div>
         </div>
       </section>
 
-      <section id="statistics" className="py-10 bg-blue-50">
+
+      <section className="bg-blue-50 text-blue-800 py-16 px-6 md:px-20">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Groundwater Quality & Safety
+          </h2>
+          <p className="text-lg md:text-xl text-blue-700 mb-8">
+            Assessing the health of India’s groundwater through data-driven
+            monitoring, AI forecasting, and early-warning alerts.
+          </p>
+
+          <div className="inline-block bg-blue-100 text-blue-900 px-6 py-3 rounded-2xl shadow-md mb-10">
+            <p className="font-medium">
+              Purpose: To safeguard communities with timely alerts and insights
+              on groundwater safety.
+            </p>
+          </div>
+
+          {/* Add your map image */}
+          <img
+            src="/images/India_image.png"   // place image in public/ folder
+            alt="Groundwater Assessment Map of India"
+            className="rounded-2xl border-2 border-black shadow-lg mx-auto w-full md:w-4/5"
+          />
+        </div>
+      </section>
+
+      <section id="statistics" className="py-10 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Heading */}
           <div className=" mb-12">
-            <h2 className="text-2xl md:text-5xl w-[60vw] leading-[1.2] text-left font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-5xl w-[60vw] leading-[1.2] text-left font-bold text-blue-800 mb-4">
               Impact of the Solution
             </h2>
-            <p className="text-xs  md:text-[15px]  text-gray-600 max-w-2xl mr leading-relaxed">
+            <p className="text-xs  md:text-[15px]  text-blue-400 max-w-2xl mr leading-relaxed">
               A comparison of groundwater monitoring before and after the adoption
               of our automated Heavy Metal Pollution Index system.
             </p>
@@ -169,7 +193,7 @@ export default function landingPage() {
         </div>
       </section>
 
-      <section id="contact" className="py-20 bg-white">
+      <section id="contact" className="py-20 bg-gray-100  00">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
 

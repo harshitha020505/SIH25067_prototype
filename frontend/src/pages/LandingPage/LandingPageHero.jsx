@@ -43,12 +43,7 @@ export default function LandingPageHero() {
             An automated platform to monitor, analyze, and visualize groundwater
             quality with accuracy and efficiency.
           </p>
-          <div className="mt-6 space-x-4">
-            <button onClick={() => window.location.href='/hmpi_map'} className="bg-white text-black px-3 py-1 rounded-md text-lg shadow-md hover:bg-gray-200 transition">
-              View Map
-            </button>
-            
-          </div>
+          
 
         </div>
         <div >

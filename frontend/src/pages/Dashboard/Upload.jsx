@@ -203,7 +203,7 @@ export default function UploadFile() {
               </div>
 
             </div>
-            <Button func={() => canProceedToStep2 && setCurrentStep(2)} disabled={!canProceedToStep2} text="Continue to File Selection →"/>
+            <button className='shadow-2xl hover:bg-blue-500 hover:text-white duration-200 border-blue-500 border-3 rounded-full px-4 py-3' onClick={() => canProceedToStep2 && setCurrentStep(2)} disabled={!canProceedToStep2}>Continue to File Selection →</button>
           </div>
         )}
 
@@ -263,9 +263,9 @@ export default function UploadFile() {
             </div>
 
             <div className="flex items-center  justify-between ">
-              <Button func={() => setCurrentStep(1)} text="← Back"/>
+              <button className='shadow-2xl hover:bg-blue-500 hover:text-white duration-200 border-blue-500 border-3 rounded-full px-4 py-2'  onClick={() => setCurrentStep(1)} >← Back</button>
               
-              <Button text="Submit Upload ✓" disabled={!canSubmit} func={handleSubmit}/>
+              <button className='shadow-2xl hover:bg-blue-500 hover:text-white duration-200 border-blue-500 border-3 rounded-full px-4 py-2' disabled={!canSubmit} onClick={handleSubmit}>Submit Upload ✓</button>
             </div>
           </div>
         )}

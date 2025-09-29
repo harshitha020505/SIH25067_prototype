@@ -20,11 +20,9 @@ export default function SandwichMenu() {
                     <img src="/images/logo2.png" alt="" className="bg-white/80 rounded-r-md p-2 w-23 h-20" />
                 </div>
                 </div>
-                <Button
-                    func={() => window.location.href = '/admin/login'}
-                    text="admin Login"
-                    style=""
-                />
+                <button
+                    onClick={() => window.location.href = '/admin/login'}
+                    className="shadow-2xl cursor-pointer bg-blue-500 quantico hover:text-white duration-200 text-white rounded-full px-4 py-2">Admin Login</button>
             </nav>
 
             

@@ -28,7 +28,7 @@ export default function landingPage() {
                 </p>
               </div>
 
-              
+
             </div>
 
             <div className="grid grid-cols-1 gap-2 w-full">
@@ -80,7 +80,7 @@ export default function landingPage() {
           </div>
         </div>
       </section>
-      
+
       <section id="statistics" className="py-10 bg-blue-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Heading */}
@@ -170,99 +170,99 @@ export default function landingPage() {
       </section>
 
       <section id="contact" className="py-20 bg-white">
-  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="grid lg:grid-cols-2 gap-12">
-      
-      {/* Left - Contact Info */}
-      <div>
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          Get in Touch
-        </h2>
-        <p className="text-base text-gray-600 mb-8 leading-relaxed">
-          Connect with the Central Ground Water Board team for inquiries, collaborations, 
-          or details about the Heavy Metal Pollution Index (HMPI).
-        </p>
-        
-        <div className="space-y-6">
-          <div className="flex items-start space-x-4">
-            <div className="p-3 bg-gray-100 rounded-lg">
-              <Mail className="w-5 h-5 text-gray-800" />
-            </div>
-            <div>
-              <div className="font-semibold text-gray-900">Email</div>
-              <div className="text-gray-600">hmpi@cgwb.gov.in</div>
-            </div>
-          </div>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12">
 
-          <div className="flex items-start space-x-4">
-            <div className="p-3 bg-gray-100 rounded-lg">
-              <Phone className="w-5 h-5 text-gray-800" />
-            </div>
+            {/* Left - Contact Info */}
             <div>
-              <div className="font-semibold text-gray-900">Phone</div>
-              <div className="text-gray-600">+91-11-2345-6789</div>
-            </div>
-          </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Get in Touch
+              </h2>
+              <p className="text-base text-gray-600 mb-8 leading-relaxed">
+                Connect with the Central Ground Water Board team for inquiries, collaborations,
+                or details about the Heavy Metal Pollution Index (HMPI).
+              </p>
 
-          <div className="flex items-start space-x-4">
-            <div className="p-3 bg-gray-100 rounded-lg">
-              <Location className="w-5 h-5 text-gray-800" />
-            </div>
-            <div>
-              <div className="font-semibold text-gray-900">Address</div>
-              <div className="text-gray-600">
-                Central Ground Water Board <br />
-                Ministry of Jal Shakti, New Delhi
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="p-3 bg-gray-100 rounded-lg">
+                    <Mail className="w-5 h-5 text-gray-800" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Email</div>
+                    <div className="text-gray-600">hmpi@cgwb.gov.in</div>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="p-3 bg-gray-100 rounded-lg">
+                    <Phone className="w-5 h-5 text-gray-800" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Phone</div>
+                    <div className="text-gray-600">+91-11-2345-6789</div>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="p-3 bg-gray-100 rounded-lg">
+                    <Location className="w-5 h-5 text-gray-800" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Address</div>
+                    <div className="text-gray-600">
+                      Central Ground Water Board <br />
+                      Ministry of Jal Shakti, New Delhi
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+
+            {/* Right - Contact Form */}
+            <div className="bg-gray-50 p-8 rounded-xl border border-gray-200 shadow-sm">
+              <h3 className="text-xl font-semibold text-gray-900 mb-6">Send us a Message</h3>
+              <form className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    placeholder="First Name"
+                    className="px-4 py-3 rounded-md border border-gray-300 focus:border-black focus:outline-none text-sm"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Last Name"
+                    className="px-4 py-3 rounded-md border border-gray-300 focus:border-black focus:outline-none text-sm"
+                  />
+                </div>
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  className="w-full px-4 py-3 rounded-md border border-gray-300 focus:border-black focus:outline-none text-sm"
+                />
+                <input
+                  type="text"
+                  placeholder="Organization"
+                  className="w-full px-4 py-3 rounded-md border border-gray-300 focus:border-black focus:outline-none text-sm"
+                />
+                <textarea
+                  placeholder="Your Message"
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-md border border-gray-300 focus:border-black focus:outline-none text-sm resize-none"
+                ></textarea>
+                <button
+                  type="submit"
+                  className="w-full bg-black text-white py-3 rounded-md font-medium hover:bg-gray-800 transition-colors text-sm"
+                >
+                  Send Message
+                </button>
+              </form>
+            </div>
+
           </div>
         </div>
-      </div>
-      
-      {/* Right - Contact Form */}
-      <div className="bg-gray-50 p-8 rounded-xl border border-gray-200 shadow-sm">
-        <h3 className="text-xl font-semibold text-gray-900 mb-6">Send us a Message</h3>
-        <form className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <input 
-              type="text" 
-              placeholder="First Name" 
-              className="px-4 py-3 rounded-md border border-gray-300 focus:border-black focus:outline-none text-sm"
-            />
-            <input 
-              type="text" 
-              placeholder="Last Name" 
-              className="px-4 py-3 rounded-md border border-gray-300 focus:border-black focus:outline-none text-sm"
-            />
-          </div>
-          <input 
-            type="email" 
-            placeholder="Email Address" 
-            className="w-full px-4 py-3 rounded-md border border-gray-300 focus:border-black focus:outline-none text-sm"
-          />
-          <input 
-            type="text" 
-            placeholder="Organization" 
-            className="w-full px-4 py-3 rounded-md border border-gray-300 focus:border-black focus:outline-none text-sm"
-          />
-          <textarea 
-            placeholder="Your Message" 
-            rows={4}
-            className="w-full px-4 py-3 rounded-md border border-gray-300 focus:border-black focus:outline-none text-sm resize-none"
-          ></textarea>
-          <button 
-            type="submit"
-            className="w-full bg-black text-white py-3 rounded-md font-medium hover:bg-gray-800 transition-colors text-sm"
-          >
-            Send Message
-          </button>
-        </form>
-      </div>
+      </section>
 
-    </div>
-  </div>
-</section>
-         
 
 
     </div>

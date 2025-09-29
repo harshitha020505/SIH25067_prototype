@@ -41,6 +41,7 @@ export default function Maps({ getLocationString, selectedState, selectedDistric
             className="border-none"
           />
         </div>
+        <p className="text-right">Know More About the Calculation Of HMPI from <span onClick={() => window.location.href="/hmpi_info"} className="text-blue-800 hover:underline">here</span></p>
       </div>
     </div>
   );

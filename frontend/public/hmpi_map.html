@@ -26,14 +26,46 @@
       font-weight: 500;
       color: #333;
     }
+
+    .info.legend {
+      background: white;
+      line-height: 18px;
+      color: #333;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .info.legend i {
+      width: 18px;
+      height: 18px;
+      float: left;
+      margin-right: 8px;
+      opacity: 0.8;
+    }
+
+    /* Custom control for checkbox */
+    .leaflet-control-layers-togglebox {
+      background: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #333;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    }
   </style>
 </head>
 
 <body>
   <div id="map"></div>
+
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
   <script>
-    // Init map centered on India
+    // Init map
     const map = L.map('map').setView([22.3511148, 78.6677428], 4.5);
 
     // Base map
@@ -42,27 +74,38 @@
       minZoom: 3
     }).addTo(map);
 
-    let statesLayer, districtsLayer, mandalsLayer;
+    let statesLayer, districtsLayer, mandalsLayer, heatLayer;
 
-    // Style for polygons
+    // Color scale
+    function getColor(hpi) {
+      if (hpi === "N/A" || hpi == null) return "#ccc";
+      hpi = Number(hpi);
+
+      return hpi <= 25 ? "#2ECC71" :
+             hpi <= 50 ? "#FFD700" :
+             hpi <= 75 ? "#FF8C00" :
+             hpi <= 100 ? "#E31A1C" :
+                          "#800026";
+    }
+
     function styleFeature(feature) {
+      const hpi = feature.properties.HPI || "N/A";
       return {
-        fillColor: "#4a90e2",
+        fillColor: getColor(hpi),
         weight: 1,
         opacity: 1,
         color: "white",
         dashArray: "2",
-        fillOpacity: 0.4
+        fillOpacity: 0.7
       };
     }
 
-    // Highlight polygon on hover
     function highlightFeature(e) {
       const layer = e.target;
       layer.setStyle({
         weight: 3,
         color: "#ffcc00",
-        fillOpacity: 0.6
+        fillOpacity: 0.8
       });
       layer.bringToFront();
     }
@@ -72,7 +115,6 @@
       layer.setStyle(styleFeature(layer.feature));
     }
 
-    // Handle click → zoom to bounds
     function zoomToFeature(e) {
       map.fitBounds(e.target.getBounds());
     }
@@ -85,34 +127,41 @@
       if (month >= 3 && month <= 5) return "Pre-Monsoon";
       if (month >= 6 && month <= 9) return "Monsoon";
       if (month >= 10 && month <= 11) return "Post-Monsoon";
-      return "Narsimhulu"; // Dec–Feb
+      return "Narsimhulu";
     }
 
-    function onEachFeatureFactory(nameField) {
+    function onEachFeatureFactory(nameField, isState = false) {
       return function (feature, layer) {
         const name = feature.properties[nameField];
         const index = feature.properties.HPI || "N/A";
-        const lastUpdated = feature.properties.last_updated || "Unknown";
-        const dataType = feature.properties.data_type || "Unknown";
-        const season = getSeason(lastUpdated);
 
-        const tooltipContent = `
-        <div class="tooltip-custom">
-          <b>${name}</b><br/>
-          HMPI: ${index}<br/>
-          Last Updated: ${lastUpdated}<br/>
-          Data Type: ${dataType}<br/>
-          Season: ${season}
-        </div>
-      `;
+        let tooltipContent;
+        if (isState) {
+          tooltipContent = `
+            <div class="tooltip-custom">
+              <b>${name}</b><br/>
+              HMPI: ${index}
+            </div>
+          `;
+        } else {
+          const lastUpdated = feature.properties.last_updated || "Unknown";
+          const dataType = feature.properties.data_type || "Unknown";
+          const season = getSeason(lastUpdated);
 
-        // Hover tooltip
+          tooltipContent = `
+            <div class="tooltip-custom">
+              <b>${name}</b><br/>
+              HMPI: ${index}<br/>
+              Last Updated: ${lastUpdated}<br/>
+              Data Type: ${dataType}<br/>
+              Season: ${season}
+            </div>
+          `;
+        }
+
         layer.bindTooltip(tooltipContent, { sticky: true });
-
-        // Click popup
         layer.bindPopup(tooltipContent);
 
-        // Highlight on hover
         layer.on({
           mouseover: highlightFeature,
           mouseout: resetHighlight,
@@ -121,38 +170,79 @@
       };
     }
 
-
-
-
     async function loadGeoJSON(url) {
       const res = await fetch(url);
       return await res.json();
     }
 
     async function initLayers() {
-      // States
       const statesData = await loadGeoJSON("india_states.geojson");
       statesLayer = L.geoJSON(statesData, {
         style: styleFeature,
-        onEachFeature: onEachFeatureFactory("NAME_1")
+        onEachFeature: onEachFeatureFactory("NAME_1", true)
       }).addTo(map);
 
-      // Districts
       const districtsData = await loadGeoJSON("india_districts.geojson");
       districtsLayer = L.geoJSON(districtsData, {
         style: styleFeature,
         onEachFeature: onEachFeatureFactory("NAME_2")
       });
 
-      // Mandals
       const mandalsData = await loadGeoJSON("india_mandals.geojson");
       mandalsLayer = L.geoJSON(mandalsData, {
         style: styleFeature,
         onEachFeature: onEachFeatureFactory("NAME_3")
       });
+
+      // Heatmap setup
+      const heatPoints = mandalsData.features.map(f => {
+        const coords = f.geometry.coordinates[0][0];
+        const lat = coords[1], lng = coords[0];
+        const hpi = f.properties.HPI || 0;
+        return [lat, lng, Math.min(hpi / 100, 1)];
+      });
+
+      heatLayer = L.heatLayer(heatPoints, {
+        radius: 25,
+        blur: 15,
+        maxZoom: 8,
+        gradient: {
+          0.0: "green",
+          0.3: "yellow",
+          0.6: "orange",
+          1.0: "red"
+        }
+      });
+
+      // Add checkbox control
+      addHeatmapControl();
     }
 
-    // Auto-switch layers on zoom
+    function addHeatmapControl() {
+      const HeatmapControl = L.Control.extend({
+        options: { position: "topright" },
+        onAdd: function () {
+          const div = L.DomUtil.create("div", "leaflet-control-layers-togglebox");
+          div.innerHTML = `
+            <label>
+              <input type="checkbox" id="toggleHeatmap"/> Show Heatmap
+            </label>
+          `;
+          return div;
+        }
+      });
+
+      map.addControl(new HeatmapControl());
+
+      document.getElementById("toggleHeatmap").addEventListener("change", (e) => {
+        if (e.target.checked) {
+          heatLayer.addTo(map);
+        } else {
+          map.removeLayer(heatLayer);
+        }
+      });
+    }
+
     map.on("zoomend", () => {
       const z = map.getZoom();
 
@@ -169,34 +259,24 @@
       }
     });
 
-    window.addEventListener("message", (event) => {
-      if (event.data.type === "zoomTo") {
-        const { state, district, mandal } = event.data.location;
-        let targetLayer;
+    const legend = L.control({ position: "bottomright" });
+    legend.onAdd = function () {
+      const div = L.DomUtil.create("div", "info legend"),
+        grades = [0, 25, 50, 75, 100];
 
-        if (mandal) {
-          targetLayer = mandalsLayer.getLayers().find(
-            (l) => l.feature.properties.NAME_3 === mandal
-          );
-        } else if (district) {
-          targetLayer = districtsLayer.getLayers().find(
-            (l) => l.feature.properties.NAME_2 === district
-          );
-        } else if (state) {
-          targetLayer = statesLayer.getLayers().find(
-            (l) => l.feature.properties.NAME_1 === state
-          );
-        }
+      div.innerHTML = "<h4>HMPI Index</h4>";
 
-        if (targetLayer) {
-          map.fitBounds(targetLayer.getBounds());
-          targetLayer.openTooltip();
-        }
+      for (let i = 0; i < grades.length; i++) {
+        const from = grades[i];
+        const to = grades[i + 1];
+        div.innerHTML +=
+          '<i style="background:' + getColor(from + 1) + '"></i> ' +
+          from + (to ? "&ndash;" + to + "<br>" : "+");
       }
-    });
+      return div;
+    };
+    legend.addTo(map);
 
-
-    // Init
     initLayers();
   </script>
 </body>

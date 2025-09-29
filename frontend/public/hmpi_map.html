@@ -77,46 +77,51 @@
       map.fitBounds(e.target.getBounds());
     }
 
-    // Factory to create onEachFeature for different levels
-    function onEachFeatureFactory(nameField) {
-      return function onEachFeature(feature, layer) {
-        const name = feature.properties[nameField];
-        const index = feature.properties.HPI || "N/A";
+    function getSeason(dateString) {
+      if (!dateString) return "N/A";
+      const d = new Date(dateString);
+      const month = d.getMonth() + 1;
 
-        // Tooltip on hover
-        layer.bindTooltip(
-          `<div class="tooltip-custom"><b>${name}</b><br/>HPI: ${index}</div>`,
-          { sticky: true }
-        );
-
-        // Popup on click
-        layer.bindPopup(`<b>${name}</b><br>HPI Index: ${index}`);
-
-        layer.on({
-          mouseover: highlightFeature,
-          mouseout: resetHighlight,
-          click: zoomToFeature
-        });
-      };
+      if (month >= 3 && month <= 5) return "Pre-Monsoon";
+      if (month >= 6 && month <= 9) return "Monsoon";
+      if (month >= 10 && month <= 11) return "Post-Monsoon";
+      return "Narsimhulu"; // Dec–Feb
     }
 
     function onEachFeatureFactory(nameField) {
       return function (feature, layer) {
         const name = feature.properties[nameField];
-        const index = feature.properties.index || "N/A";
+        const index = feature.properties.HPI || "N/A";
+        const lastUpdated = feature.properties.last_updated || "Unknown";
+        const dataType = feature.properties.data_type || "Unknown";
+        const season = getSeason(lastUpdated);
 
-        // Hover → show name + index
-        layer.bindTooltip(`${name} (Index: ${index})`, {
-          permanent: false,
-          direction: "top",
-        });
+        const tooltipContent = `
+        <div class="tooltip-custom">
+          <b>${name}</b><br/>
+          HMPI: ${index}<br/>
+          Last Updated: ${lastUpdated}<br/>
+          Data Type: ${dataType}<br/>
+          Season: ${season}
+        </div>
+      `;
 
-        // Click → zoom to feature
-        layer.on("click", () => {
-          map.fitBounds(layer.getBounds());
+        // Hover tooltip
+        layer.bindTooltip(tooltipContent, { sticky: true });
+
+        // Click popup
+        layer.bindPopup(tooltipContent);
+
+        // Highlight on hover
+        layer.on({
+          mouseover: highlightFeature,
+          mouseout: resetHighlight,
+          click: zoomToFeature,
         });
       };
     }
+
+
 
 
     async function loadGeoJSON(url) {

@@ -8,10 +8,11 @@ import Reports from "./Dashboard/Reports";
 import Alerts from "./Dashboard/Alerts";
 import Help from "./Dashboard/Help";
 import Maps from "./Dashboard/Maps";
+import UploadFile from "./Dashboard/Upload";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 
 export default function OfficeDashboard() {
-  const [activeTab, setActiveTab] = useState("maps");
+  const [activeTab, setActiveTab] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedMandal, setSelectedMandal] = useState("");
@@ -24,13 +25,18 @@ export default function OfficeDashboard() {
   let { role } = useParams();
   const navigate = useNavigate();
   role = role === "quality-inspector" ? "Quality Inspector" : "Field Officer";
+  useEffect(() => {
+    setActiveTab(role === "Quality Inspector" ? "maps" : "upload");
+  }, [role]);
+
 
   const location = useLocation();
   const user = location.state?.user;
 
+
   const handleLogout = () => navigate("/admin/login");
 
-  // ⬇️ Load GeoJSON data for states, districts, mandals
+
   useEffect(() => {
     fetch("/india_states.geojson")
       .then(res => res.json())
@@ -141,14 +147,14 @@ export default function OfficeDashboard() {
   };
 
   const navItems = [
-    { id: "maps", label: "Maps", icon: <Map size={18} />, roles: ["Field Officer", "Quality Inspector"] },
+    { id: "maps", label: "Maps", icon: <Map size={18} />, roles: ["Quality Inspector"] },
     { id: "dss", label: "DSS", icon: <Database size={18} />, roles: ["Quality Inspector"] },
     { id: "hmpi", label: "HMPI", icon: <Activity size={18} />, roles: ["Quality Inspector"] },
     { id: "forecast", label: "Forecast", icon: <BarChart3 size={18} />, roles: ["Quality Inspector"] },
     { id: "reports", label: "Reports", icon: <FileText size={18} />, roles: ["Quality Inspector"] },
-    { id: "alerts", label: "Alerts", icon: <Bell size={18} />, roles: ["Field Officer", "Quality Inspector"] },
     { id: "upload", label: "Upload", icon: <Upload size={18} />, roles: ["Field Officer"] },
-    { id: "help", label: "Help", icon: <HelpCircle size={18} />, roles: ["Field Officer", "Quality Inspector"] },
+    { id: "alerts", label: "Alerts", icon: <Bell size={18} />, roles: ["Field Officer", "Quality Inspector"] },
+
   ];
 
   const allowedNav = navItems.filter((item) => item.roles.includes(role));
@@ -171,7 +177,7 @@ export default function OfficeDashboard() {
             </div>
             <button
               onClick={() => setShowLocationModal(true)}
-              className="ml-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition shadow"
+              className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white font-semibold shadow-lg hover:rounded-3xl hover:shadow-xl transition-all duration-300"
             >
               Change
             </button>
@@ -207,8 +213,7 @@ export default function OfficeDashboard() {
         {activeTab === "forecast" && <Forecast />}
         {activeTab === "reports" && <Reports />}
         {activeTab === "alerts" && <Alerts />}
-        {activeTab === "upload" && <Upload />}
-        {activeTab === "help" && <Help />}
+        {activeTab === "upload" && <UploadFile />}
       </main>
 
       <NavBar allowedNav={allowedNav} activeTab={activeTab} setActiveTab={setActiveTab} role={role} />

@@ -3,7 +3,7 @@ import './button.css';
 
 export default function Button({ text, style, func, disabled }) {
   return (
-    <div className="relative w-fit mx-auto">
+    <div className="relative w-fit">
       <button
         onClick={func}
         disabled={disabled}

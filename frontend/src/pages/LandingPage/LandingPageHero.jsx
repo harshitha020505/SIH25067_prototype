@@ -35,7 +35,7 @@ export default function LandingPageHero() {
       <div className="absolute inset-0 bg-black/60 items-center justify-items-start  text-white px-10 grid grid-cols-2">
 
         <div className="mt-20 quantico">
-          <h1 className="text-6xl tracking-wider font-bold mb-4">
+          <h1 className="text-7xl tracking-wider font-bold mb-4">
             Heavy Metal Pollution Index
             
           </h1>
@@ -44,7 +44,7 @@ export default function LandingPageHero() {
             quality with accuracy and efficiency.
           </p>
           <div className="mt-6 space-x-4">
-            <button className="bg-white text-black px-3 py-1 rounded-md text-md shadow-md hover:bg-gray-200 transition">
+            <button onClick={() => window.location.href='/hmpi_map'} className="bg-white text-black px-3 py-1 rounded-md text-lg shadow-md hover:bg-gray-200 transition">
               View Map
             </button>
             

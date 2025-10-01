@@ -52,16 +52,12 @@ export default function Forecast() {
   }, [search]);
 
   useEffect(() => {
-    if (!selectedVillage || !selectedType) return;
-    const loc = locationData[selectedVillage].find(l => l.toLowerCase().includes(selectedType.toLowerCase()));
-    setSelectedLocation(loc);
-  }, [selectedType, selectedVillage]);
-
-  useEffect(() => {
     if (!selectedLocation) return;
     setIsLoading(true);
-    fetch(`http://localhost:5174/predict?location=${selectedLocation}`)
-
+  
+    const backendURL = "https://sih25067-prototype-3.onrender.com"; // <-- deployed backend
+  
+    fetch(`${backendURL}/predict?location=${encodeURIComponent(selectedLocation)}`)
       .then(res => res.json())
       .then(data => {
         setHistorical(data.historical);
@@ -70,6 +66,7 @@ export default function Forecast() {
       })
       .catch(() => setIsLoading(false));
   }, [selectedLocation]);
+  
 
   const handleVillageSearch = (e) => {
     if (e.key === "Enter") {

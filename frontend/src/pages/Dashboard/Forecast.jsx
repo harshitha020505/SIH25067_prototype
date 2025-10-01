@@ -50,7 +50,14 @@ export default function Forecast() {
       setSelectedType("");
     }
   }, [search]);
-
+  useEffect(() => {
+    if (selectedVillage && selectedType) {
+      const loc = locationData[selectedVillage].find(l =>
+        l.toLowerCase().includes(selectedType.toLowerCase())
+      );
+      setSelectedLocation(loc || "");
+    }
+  }, [selectedVillage, selectedType]);
   useEffect(() => {
     if (!selectedLocation) return;
     setIsLoading(true);

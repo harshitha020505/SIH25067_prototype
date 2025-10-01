@@ -175,6 +175,24 @@ def manual_alert():
         }), 500
 # =========================================================================
 
+@app.route("/predict", methods=["GET"])
+def predict():
+    location = request.args.get("location")
+    if not location or location not in historical_data:
+        return jsonify({"error": "Invalid location"}), 400
+
+    # Historical values
+    historical = historical_data[location]
+
+    # Predicted values
+    predicted = predict_next_values(location, n_future=5)
+
+    return jsonify({
+        "historical": historical,
+        "predicted": predicted
+    })
+
+
 if __name__ == "__main__":
     # Ensure this runs on a port different from your React app
     app.run(debug=True, port=5174)

@@ -60,7 +60,8 @@ export default function Forecast() {
   useEffect(() => {
     if (!selectedLocation) return;
     setIsLoading(true);
-    fetch(`http://localhost:5000/predict?location=${selectedLocation}`)
+    fetch(`http://localhost:5174/predict?location=${selectedLocation}`)
+
       .then(res => res.json())
       .then(data => {
         setHistorical(data.historical);
@@ -128,11 +129,11 @@ export default function Forecast() {
     ]
   };
 
-  const chartOptions = { 
-    responsive: true, 
+  const chartOptions = {
+    responsive: true,
     maintainAspectRatio: false,
-    plugins: { 
-      legend: { 
+    plugins: {
+      legend: {
         position: "top",
         labels: { usePointStyle: true, padding: 12, font: { size: 11, weight: '500' } }
       },
@@ -143,7 +144,7 @@ export default function Forecast() {
         bodyFont: { size: 11 }
       }
     },
-    scales: { 
+    scales: {
       y: { ticks: { font: { size: 10 } } },
       x: { ticks: { font: { size: 10 } } }
     }
@@ -161,7 +162,7 @@ export default function Forecast() {
             <Search className="mr-2 text-blue-600" size={16} />
             Location Selection
           </h3>
-          
+
           <div className="space-y-3">
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">Search Village/City</label>
@@ -226,7 +227,7 @@ export default function Forecast() {
                 </div>
               </div>
             )}
-            
+
             {predictedStatus && (
               <div className={`${predictedStatus.bg} rounded-xl shadow p-3 border-l-2`}>
                 <div className="flex items-center justify-between">

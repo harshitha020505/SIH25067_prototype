@@ -19,7 +19,8 @@ export default function OfficeDashboard() {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedMandal, setSelectedMandal] = useState("");
   const [showLocationModal, setShowLocationModal] = useState(false);
-  const [states, setStates] = useState(["Telangana", "Delhi", "Maharashtra", "West Bengal", "Tamil Nadu"]);
+
+  const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [mandals, setMandals] = useState([]);
 
@@ -32,16 +33,31 @@ export default function OfficeDashboard() {
     setActiveTab(role === "Quality Inspector" ? "maps" : "upload");
   }, [role]);
 
+
   useEffect(() => {
-    setActiveTab(role === "Quality Inspector" ? "maps" : "upload");
-  }, [role]);
+    fetch("/india_states.geojson")
+      .then(res => res.json())
+      .then(data => {
+        const stateList = data.features.map(f => f.properties.NAME_1);
+        setStates([...new Set(stateList)]);
+      });
 
-  const filteredDistricts = selectedState === "Telangana" ? ["Hyderabad", "Rangareddy", "Medchal"] :
-    selectedState === "Delhi" ? ["Central Delhi", "North Delhi", "South Delhi"] :
-      selectedState === "Maharashtra" ? ["Mumbai", "Pune", "Nagpur"] : [];
+    fetch("/india_districts.geojson")
+      .then(res => res.json())
+      .then(data => setDistricts(data.features));
 
-  const filteredMandals = selectedDistrict === "Hyderabad" ? ["Secunderabad", "Khairatabad", "Charminar"] :
-    selectedDistrict === "Mumbai" ? ["Andheri", "Bandra", "Colaba"] : [];
+    fetch("/india_mandals.geojson")
+      .then(res => res.json())
+      .then(data => setMandals(data.features));
+  }, []);
+
+  // Filter districts and mandals dynamically
+  const filteredDistricts = districts.filter(
+    (d) => d.properties.NAME_1 === selectedState
+  );
+  const filteredMandals = mandals.filter(
+    (m) => m.properties.NAME_2 === selectedDistrict
+  );
 
   const heavyMetals = [
     { name: "Arsenic (As)", limit: 0.01, unit: "mg/L", current: 0.008, status: "safe" },
@@ -93,7 +109,9 @@ export default function OfficeDashboard() {
               >
                 <option value="">-- Select District --</option>
                 {filteredDistricts.map(d => (
-                  <option key={d} value={d}>{d}</option>
+                  <option key={d.properties.NAME_2} value={d.properties.NAME_2}>
+                    {d.properties.NAME_2}
+                  </option>
                 ))}
               </select>
             </div>
@@ -109,8 +127,11 @@ export default function OfficeDashboard() {
               >
                 <option value="">-- Select Mandal --</option>
                 {filteredMandals.map(m => (
-                  <option key={m} value={m}>{m}</option>
+                  <option key={m.properties.NAME_3} value={m.properties.NAME_3}>
+                    {m.properties.NAME_3}
+                  </option>
                 ))}
+
               </select>
             </div>
           )}
@@ -171,10 +192,10 @@ export default function OfficeDashboard() {
 
           <div className="flex items-center space-x-4">
             <div className="flex items-center">
-            <User className="inline-block text-blue-500 " size={20} />
-            <span className=" text-blue-800 px-2 py-2 rounded-lg text-sm font-semibold ">
-              {role}
-            </span>
+              <User className="inline-block text-blue-500 " size={20} />
+              <span className=" text-blue-800 px-2 py-2 rounded-lg text-sm font-semibold ">
+                {role}
+              </span>
             </div>
             <button
               onClick={handleLogout}

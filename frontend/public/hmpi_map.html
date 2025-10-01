@@ -82,10 +82,10 @@
       hpi = Number(hpi);
 
       return hpi <= 25 ? "#2ECC71" :
-             hpi <= 50 ? "#FFD700" :
-             hpi <= 75 ? "#FF8C00" :
-             hpi <= 100 ? "#E31A1C" :
-                          "#800026";
+        hpi <= 50 ? "#FFD700" :
+          hpi <= 75 ? "#FF8C00" :
+            hpi <= 100 ? "#E31A1C" :
+              "#800026";
     }
 
     function styleFeature(feature) {
@@ -127,7 +127,7 @@
       if (month >= 3 && month <= 5) return "Pre-Monsoon";
       if (month >= 6 && month <= 9) return "Monsoon";
       if (month >= 10 && month <= 11) return "Post-Monsoon";
-      return "Narsimhulu";
+      return "Winter";
     }
 
     function onEachFeatureFactory(nameField, isState = false) {
@@ -242,6 +242,27 @@
         }
       });
     }
+
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "zoomTo") {
+        const { state, district, mandal } = event.data.location;
+        let targetLayer;
+
+        if (mandal) {
+          targetLayer = mandalsLayer.getLayers().find(l => l.feature.properties.NAME_3 === mandal);
+        } else if (district) {
+          targetLayer = districtsLayer.getLayers().find(l => l.feature.properties.NAME_2 === district);
+        } else if (state) {
+          targetLayer = statesLayer.getLayers().find(l => l.feature.properties.NAME_1 === state);
+        }
+
+        if (targetLayer) {
+          map.fitBounds(targetLayer.getBounds());
+          targetLayer.openTooltip();
+        }
+      }
+    });
+
 
     map.on("zoomend", () => {
       const z = map.getZoom();

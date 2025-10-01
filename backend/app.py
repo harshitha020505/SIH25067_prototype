@@ -9,11 +9,16 @@ import numpy as np
 from tensorflow.keras.models import Sequential 
 from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
+import os
 # ---------------------------------------------------------------------
 
 app = Flask(__name__)
 # CHANGE 1: Kept CORS for frontend-backend communication
-CORS(app)
+from flask_cors import CORS
+
+# Allow localhost dev + your deployed frontend
+CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "https://sih-25067-prototype.vercel.app"]}})
+
 
 # =========================================================================
 # ⚠️ PROTOTYPE HARDCODED TWILIO CREDENTIALS (for demo only)

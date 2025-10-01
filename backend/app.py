@@ -12,7 +12,7 @@ from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 # ---------------------------------------------------------------------
 
-app = Flask(_name_)
+app = Flask(__name__)
 # CHANGE 1: Kept CORS for frontend-backend communication
 CORS(app, resources={r"/": {"origins": ""}})
 
@@ -200,6 +200,6 @@ def predict():
     })
 
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5174))
     app.run(debug=True, host="0.0.0.0", port=port)

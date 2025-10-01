@@ -1,8 +1,7 @@
 # backend/app.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from twilio.rest import Client
-import os
+from twilio.rest import Client 
 
 # --- LSTM/ML imports are kept, but simplified for this demo context ---
 import numpy as np
@@ -14,16 +13,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 app = Flask(__name__)
 # CHANGE 1: Kept CORS for frontend-backend communication
-CORS(app, supports_credentials=True)
-
-
-@app.after_request
-def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "https://sih-25067-prototype.vercel.app"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-    return response
-
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # =========================================================================
 # ⚠️ PROTOTYPE HARDCODED TWILIO CREDENTIALS (for demo only)
@@ -211,4 +201,3 @@ def predict():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5174))
-    app.run(debug=True, host="0.0.0.0", port=port)

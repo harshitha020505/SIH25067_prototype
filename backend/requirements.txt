@@ -12,7 +12,8 @@ scikit-learn==1.3.2
 matplotlib==3.7.2
 
 # TensorFlow & related
-tensorflow==2.20.0
+tensorflow==2.19.0
+
 keras==3.11.3
 opt_einsum==3.4.0
 ml_dtypes==0.5.3
@@ -53,5 +54,6 @@ termcolor==3.1.0
 # notebook==7.5.0
 ipykernel==6.30.0
 jupyterlab==4.4.4
+
 
 

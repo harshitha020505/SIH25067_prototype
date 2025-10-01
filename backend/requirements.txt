@@ -39,14 +39,17 @@ pytz==2025.2
 python-dateutil==2.9.0
 tzdata==2025.1
 joblib==1.5.2
-protobuf==4.23.3
+# protobuf==4.23.3
 grpcio-status==1.71.0
 setuptools-scm==7.1.0
-rich==14.2.0
-tqdm==4.68.0
+rich==13.4.2
+
+tqdm==4.65.0
+
 termcolor==3.1.0
 
 # Jupyter (optional)
-notebook==7.5.0
+# notebook==7.5.0
 ipykernel==6.30.0
 jupyterlab==4.4.4
+

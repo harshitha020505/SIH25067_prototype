@@ -14,7 +14,16 @@ from sklearn.preprocessing import MinMaxScaler
 
 app = Flask(__name__)
 # CHANGE 1: Kept CORS for frontend-backend communication
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, supports_credentials=True)
+
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "https://sih-25067-prototype.vercel.app"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    return response
+
 
 # =========================================================================
 # ⚠️ PROTOTYPE HARDCODED TWILIO CREDENTIALS (for demo only)

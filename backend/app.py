@@ -14,10 +14,10 @@ from sklearn.preprocessing import MinMaxScaler
 
 app = Flask(__name__)
 # CHANGE 1: Kept CORS for frontend-backend communication
-CORS(app, resources={r"/": {"origins": ""}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # =========================================================================
-# ⚠ PROTOTYPE HARDCODED TWILIO CREDENTIALS (for demo only)
+# ⚠️ PROTOTYPE HARDCODED TWILIO CREDENTIALS (for demo only)
 # =========================================================================
 # CHANGE 2: Kept original hardcoded Twilio credentials (MUST BE REPLACED)
 TWILIO_ACCOUNT_SID = "ACe113e12727037b86775f531c0f24b8b0"
@@ -30,7 +30,7 @@ TWILIO_PHONE_NUMBER = "+18145177571"  # your Twilio phone number
 try:
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 except Exception as e:
-    print(f"⚠ TWILIO CLIENT INIT ERROR: {e}. Check hardcoded credentials.")
+    print(f"⚠️ TWILIO CLIENT INIT ERROR: {e}. Check hardcoded credentials.")
     client = None
 
 # =========================================================================
@@ -113,7 +113,7 @@ def predict_next_values(location, n_future=5):
 
 # =========================================================================
 # MODIFIED: Universal Alert Function (Simplified and focused on HPI)
-# This replaces your original send_alert function.
+# This replaces your original `send_alert` function.
 # =========================================================================
 def send_alert(location, hpi_value):
     """Sends SMS alert for critical HPI values."""

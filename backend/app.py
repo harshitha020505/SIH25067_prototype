@@ -13,7 +13,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 app = Flask(__name__)
 # CHANGE 1: Kept CORS for frontend-backend communication
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app) 
 
 # =========================================================================
 # ⚠️ PROTOTYPE HARDCODED TWILIO CREDENTIALS (for demo only)
@@ -200,4 +200,5 @@ def predict():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5174))
+    # Ensure this runs on a port different from your React app
+    app.run(debug=True, port=5174)

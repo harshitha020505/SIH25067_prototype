@@ -32,7 +32,9 @@ mysqlclient==2.2.7
 psycopg2-binary==2.9.10
 pymongo==4.3.3
 PyMySQL==1.1.2
-SQLAlchemy==2.0.45
+
+SQLAlchemy==2.0.44
+
 
 # Utilities
 python-dotenv==1.0.0
@@ -51,5 +53,6 @@ termcolor==3.1.0
 notebook==7.5.0
 ipykernel==6.30.0
 jupyterlab==4.4.4
+
 
 

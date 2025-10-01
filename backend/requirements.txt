@@ -2,7 +2,8 @@
 pip==25.2
 setuptools==80.9.0
 wheel==0.45.1
-streamlit==1.29.0  # or latest
+#streamlit==1.29.0  # or latest
+gunicorn==22.1.0
 
 # Core packages
 numpy==1.26.4
@@ -54,6 +55,7 @@ termcolor==3.1.0
 # notebook==7.5.0
 ipykernel==6.30.0
 jupyterlab==4.4.4
+
 
 
 

@@ -199,6 +199,6 @@ def predict():
     })
 
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     # Ensure this runs on a port different from your React app
     app.run(debug=True, port=5174)

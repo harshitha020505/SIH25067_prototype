@@ -11,7 +11,7 @@ from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 # ---------------------------------------------------------------------
 
-app = Flask(_name_)
+app = Flask(__name__)
 # CHANGE 1: Kept CORS for frontend-backend communication
 CORS(app) 
 

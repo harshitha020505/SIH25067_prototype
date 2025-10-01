@@ -1,7 +1,8 @@
 # backend/app.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from twilio.rest import Client 
+from twilio.rest import Client
+import os
 
 # --- LSTM/ML imports are kept, but simplified for this demo context ---
 import numpy as np
@@ -11,9 +12,9 @@ from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 # ---------------------------------------------------------------------
 
-app = Flask(__name__)
+app = Flask(_name_)
 # CHANGE 1: Kept CORS for frontend-backend communication
-CORS(app) 
+CORS(app, resources={r"/": {"origins": ""}})
 
 # =========================================================================
 # ⚠ PROTOTYPE HARDCODED TWILIO CREDENTIALS (for demo only)
@@ -199,6 +200,6 @@ def predict():
     })
 
 
-if __name__ == "__main__":
-    # Ensure this runs on a port different from your React app
-    app.run(debug=True, port=5174)
+if _name_ == "_main_":
+    port = int(os.environ.get("PORT", 5174))
+    app.run(debug=True, host="0.0.0.0", port=port)
